@@ -31,6 +31,20 @@
     overflow-x: hidden;
   }
 
+  /* Synapse network background */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.65;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #bg-canvas { display: none; }
+  }
+
   /* Top accent */
   .top-bar {
     height: 4px;
@@ -412,6 +426,8 @@
 </head>
 <body>
 
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
 <div class="top-bar"></div>
 
 <nav>
@@ -501,3 +517,141 @@
 
 <footer>
   &#169; 2026 Synapse Hive
+</footer>
+
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  let width = 0, height = 0;
+  let nodes = [];
+  let pulses = [];
+  const MAX_DIST = 170;
+  const MAX_DIST_SQ = MAX_DIST * MAX_DIST;
+
+  function nodeCount() {
+    // Density: roughly 1 node per 30k px², capped for performance.
+    const target = Math.round((width * height) / 30000);
+    return Math.max(24, Math.min(70, target));
+  }
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const target = nodeCount();
+    if (nodes.length === 0) {
+      for (let i = 0; i < target; i++) {
+        nodes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+        });
+      }
+    } else {
+      // Keep existing positions but clamp to new viewport
+      for (const n of nodes) {
+        if (n.x > width)  n.x = width  - 1;
+        if (n.y > height) n.y = height - 1;
+      }
+    }
+  }
+
+  function spawnPulse() {
+    const candidates = [];
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        if (dx * dx + dy * dy < MAX_DIST_SQ) candidates.push([i, j]);
+      }
+    }
+    if (candidates.length === 0) return;
+    const [a, b] = candidates[(Math.random() * candidates.length) | 0];
+    pulses.push({ from: a, to: b, t: 0 });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    // Update node positions
+    for (const n of nodes) {
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > width)  n.vx = -n.vx;
+      if (n.y < 0 || n.y > height) n.vy = -n.vy;
+    }
+
+    // Draw connections
+    ctx.lineWidth = 1;
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < MAX_DIST_SQ) {
+          const alpha = 0.10 * (1 - Math.sqrt(d2) / MAX_DIST);
+          ctx.strokeStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw nodes
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    for (const n of nodes) {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Draw and update pulses
+    const next = [];
+    for (const p of pulses) {
+      p.t += 0.016;
+      if (p.t >= 1) continue;
+      next.push(p);
+      const a = nodes[p.from];
+      const b = nodes[p.to];
+      const x = a.x + (b.x - a.x) * p.t;
+      const y = a.y + (b.y - a.y) * p.t;
+      const fade = Math.sin(p.t * Math.PI); // 0 -> 1 -> 0
+      ctx.fillStyle = 'rgba(255,107,53,' + (fade * 0.35).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.arc(x, y, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,45,85,' + (fade * 0.9).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    pulses = next;
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  setInterval(spawnPulse, 1400);
+  // Spawn a couple straight away so first paint isn't empty
+  spawnPulse(); spawnPulse();
+  draw();
+})();
+</script>
+
+</body>
+</html>
