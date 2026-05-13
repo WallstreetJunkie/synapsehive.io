@@ -12,8 +12,8 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   
   :root {
-    --red: #FF2D55;
-    --orange: #FF6B35;
+    --red: #0047AB;
+    --orange: #0066FF;
     --teal: #00D4AA;
     --blue: #0066FF;
     --bg: #0a0a0a;
@@ -117,7 +117,7 @@
     right: -10%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(255,45,85,0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0,71,171,0.10) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -172,7 +172,7 @@
 
   .hero-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(255,45,85,0.25);
+    box-shadow: 0 12px 40px rgba(0,71,171,0.35);
   }
 
   /* Promises */
@@ -324,7 +324,7 @@
   .testi-card {
     padding: 32px;
     border-left: 4px solid var(--red);
-    background: rgba(255,45,85,0.03);
+    background: rgba(0,71,171,0.05);
     border-radius: 0 12px 12px 0;
   }
 
@@ -630,11 +630,11 @@
       const x = a.x + (b.x - a.x) * p.t;
       const y = a.y + (b.y - a.y) * p.t;
       const fade = Math.sin(p.t * Math.PI); // 0 -> 1 -> 0
-      ctx.fillStyle = 'rgba(255,107,53,' + (fade * 0.35).toFixed(3) + ')';
+      ctx.fillStyle = 'rgba(0,102,255,' + (fade * 0.35).toFixed(3) + ')';
       ctx.beginPath();
       ctx.arc(x, y, 8, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = 'rgba(255,45,85,' + (fade * 0.9).toFixed(3) + ')';
+      ctx.fillStyle = 'rgba(0,71,171,' + (fade * 0.95).toFixed(3) + ')';
       ctx.beginPath();
       ctx.arc(x, y, 2.6, 0, Math.PI * 2);
       ctx.fill();
