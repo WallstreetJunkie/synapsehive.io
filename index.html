@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SynapseHive</title>
+  <title>Synapse Hive | Your delivery partner. Teams built for shipping, not seats filled.</title>
+  <meta name="description" content="Your delivery partner, not a software house. Senior teams from proven software houses, assembled for your roadmap: as many as you need, no one you don't.">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,15 +129,16 @@
     }
 
     h1 {
-      font-size: 140px;
+      /* Fluid size: hero copy is longer than the original two-word lines */
+      font-size: clamp(44px, 5.5vw, 108px);
       font-weight: 600;
-      line-height: auto;
+      line-height: 1.1;
       letter-spacing: -0.02em;
       color: var(--text);
       white-space: nowrap;
     }
 
-    .body-text { display: flex; flex-direction: column; }
+    .body-text { display: flex; flex-direction: column; max-width: 860px; }
     .body-text p {
       font-size: 18px;
       font-weight: 400;
@@ -242,7 +244,7 @@
 
       .socials img { width: 24px; height: 24px; }
 
-      h1 { font-size: 110px; }
+      h1 { font-size: clamp(38px, 5.5vw, 82px); }
       .body-text p { font-size: 16px; }
 
       /* .trusted needs explicit width so logos-row-d width:100% resolves */
@@ -279,7 +281,7 @@
       .socials img { width: 20px; height: 20px; }
 
       main { gap: 20px; }
-      h1 { font-size: 47px; white-space: normal; }
+      h1 { font-size: 32px; white-space: normal; }
       .body-text p { font-size: 14px; }
 
       /* Switch to two-row logos */
@@ -320,7 +322,7 @@
       .socials { gap: 13px; }
       .socials img { width: 20px; height: 20px; }
       main { gap: 20px; }
-      h1 { font-size: 47px; white-space: normal; }
+      h1 { font-size: 32px; white-space: normal; }
       .body-text p { font-size: 14px; }
       /* Single row with mobile-sized logos */
       .logos-row-d { display: flex; }
@@ -373,21 +375,21 @@
 
   <!-- ░░ Hero ░░ -->
   <main>
-    <h1>Scale smarter.<br>Ship faster.</h1>
+    <h1>Delivery shaped<br>for what comes next.</h1>
     <div class="body-text">
-      <p>We deploy vetted development teams to your project within 48 hours.</p>
-      <p>No recruiting, no ramp-up — just expert engineers delivering from day one.&nbsp;</p>
+      <p>Synapse Hive brings together proven software development capabilities through one accountable partnership, aligned with your technical environment, priorities and pace of delivery.</p>
       <div class="gap"></div>
-      <p>Get ready to plug into the Hive.&nbsp;<a
-           href="https://calendly.com/jakub-chmielewski-synapsehive/30min"
-           target="_blank" rel="noopener">Book a call.</a></p>
+      <p>What your roadmap needs, nothing it doesn't.</p>
+      <div class="gap"></div>
+      <p><a href="https://calendly.com/jakub-chmielewski-synapsehive/30min"
+           target="_blank" rel="noopener">Book a 15-minute intro call.</a>&nbsp;You'll talk to an engineer, not a salesperson.</p>
     </div>
   </main>
 
   <!-- ░░ Footer ░░ -->
   <footer>
     <div class="trusted">
-      <p class="trusted-label">Trusted by:</p>
+      <p class="trusted-label">Built and scaled by our partner teams:</p>
 
       <!-- Desktop / Tablet: single row -->
       <div class="logos-row-d">
@@ -420,7 +422,7 @@
       </div>
     </div>
 
-    <p class="questions">Questions?&nbsp;<a href="mailto:contact@synapsehive.io">contact@synapsehive.io&nbsp;</a></p>
+    <p class="questions">Discuss an engagement:&nbsp;<a href="mailto:contact@synapsehive.io">contact@synapsehive.io&nbsp;</a></p>
   </footer>
 
 </div><!-- .page -->
